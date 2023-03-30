@@ -50,6 +50,28 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label d-block mb-2">
+                            Tag
+                        </label>
+                            @foreach ($tags as $tag)
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" name="tags[]" type="checkbox" id="tag--{{ $tag->id }}" value="{{ $tag->id }}"
+                                @if (old('tags') && is_array(old('tags')) && count(old('tags')) > 0)
+                                {{ in_array($tag->id, old('tags', [])) ? 'checked' : ''}}
+                                @elseif($post->tags->contains($tag->id))
+                                  checked
+                                @endif
+                                {{ in_array($tag->id, old('tags', [])) ? 'checked' : ''}}>
+                                <label class="form-check-label" for="tag--{{ $tag->id }}">
+                                    {{ $tag->name }}
+                                </label>
+                            </div>
+                            @endforeach
+
+
+                    </div>
+
+                    <div class="mb-3">
                         <label for="formFile" class="form-label">Default file input example</label>
 
                         @if ($post->img)

@@ -38,12 +38,30 @@
                         <textarea class="form-control" id="content" required maxlength="4096" name="content" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
-                        <select name="category_id" id="category_id">
+                        <label class="form-lable mb-2" for="category_id">
+                            Categorie
+                        </label>
+                        <select class="form-select" name="category_id" id="category_id">
                             <option value="">Nessuna categoria</option>
                             @foreach ($categories as $category)
                              <option value="{{ $category->id }}" {{ old("category_id") == $category->id ? 'selected' : ''}}>{{ $category->name }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label d-block mb-2">
+                            Tag
+                        </label>
+                            @foreach ($tags as $tag)
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" name="tags[]" type="checkbox" id="tag--{{ $tag->id }}" value="{{ $tag->id }}" {{ in_array($tag->id, old('tags', [])) ? 'checked' : ''}}>
+                                <label class="form-check-label" for="tag--{{ $tag->id }}">
+                                    {{ $tag->name }}
+                                </label>
+                            </div>
+                            @endforeach
+
+
                     </div>
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Default file input example</label>

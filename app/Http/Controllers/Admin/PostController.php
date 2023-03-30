@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 // Models
 use App\Models\Category;
+use App\Models\Tag;
 
 class PostController extends Controller
 {
@@ -35,7 +36,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $tags = Tag::all();
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -60,6 +62,13 @@ class PostController extends Controller
 
         $newPost = Post::create($data);
 
+        if (array_key_exists('tags', $data)) {
+            foreach ($data['tags'] as $tagId) {
+                $newPost->tags()->attach($tagId);
+            }
+        }
+
+
         return redirect()->route('admin.posts.show', $newPost);
     }
 
@@ -83,7 +92,8 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        $tags = Tag::all();
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -115,6 +125,18 @@ class PostController extends Controller
         $data['slug'] = Str::slug($data['title']);
 
         $post->update($data);
+
+        if (array_key_exists('tags', $data)) {
+            // foreach ($post->tags as $tag) {
+            //     $post->tags()->detach($tag);
+            // }
+            // foreach ($data['tags'] as $tagId) {
+            //     $post->tags()->attach($tagId);
+            // }
+            $post->tags()->sync($data['tags']);
+        } else {
+            $post->tags()->sync([]);
+        }
 
         return redirect()->route('admin.posts.show', $post->id);
     }
