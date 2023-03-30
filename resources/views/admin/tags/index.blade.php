@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col">
             <h1>
-                Tutte i Tag
+                Tutti i Tags
             </h1>
             <a href="{{ route('admin.tags.create') }}" class="btn btn-success">
                 Aggiungi Tag
@@ -18,33 +18,27 @@
                 <thead>
                   <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">Titolo</th>
+                    <th scope="col">Nome</th>
                     <th scope="col">Slug</th>
-                    <th scope="col">Categoria</th>
+                    <th scope="col">N. Articoli</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($posts as $post)
+                    @foreach ($tags as $tag)
                     <tr>
-                        <th scope="row">{{ $post->id }}</th>
-                        <td>{{ $post->title }}</td>
-                        <td>{{ $post->slug }}</td>
-                        <td>                
-                          @if ($post->category)
-                            <a href="{{ route('admin.categories.show', $post->category->id) }}">{{ $post->category->name }}</a> 
-                          @else
-                             Nessuna Categoria
-                          @endif
-                        </td>
+                        <th scope="row">{{ $tag->id }}</th>
+                        <td>{{ $tag->name }}</td>
+                        <td>{{ $tag->slug }}</td>
+                        <td>{{ $tag->posts()->count() }}</td>
                         <td>
-                            <a href="{{ route('admin.posts.show', $post->id) }}" class="btn btn-info">
+                            <a href="{{ route('admin.tags.show', $tag->id) }}" class="btn btn-info">
                                 Dettagli
                             </a>
-                            <a href="{{ route('admin.posts.edit', $post->id) }} " class="btn btn-warning">
+                            <a href="{{ route('admin.tags.edit', $tag->id) }} " class="btn btn-warning">
                                 Modifica
                             </a>
-                            <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Sei sicuro di voler eliminare questo post')" >
+                            <form action="{{ route('admin.tags.destroy', $tag->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Sei sicuro di voler eliminare questo tag?')" >
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger">
@@ -59,4 +53,4 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection  

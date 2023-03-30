@@ -5,29 +5,36 @@
     <div class="row justify-content-center">
         <div class="col">
             <h1>
-                {{ $post->title }}
+                {{ $tag->name }}
             </h1>
             <h6>
-                {{ $post->slug }}
+              Slug:  {{ $tag->slug }}
             </h6>
-            <h3>
-                Categoria:
-                @if ($post->category)
-                   <a href="{{ route('admin.categories.show', $post->category->id) }}">{{ $post->category->name }}</a> 
-                @else
-                    Nessuna Categoria
-                @endif
-            </h3>
-            @if ($post->img)
-                <div>
-                    <img src="{{ asset('storage/'.$post->img) }}" style="height: 300px;" alt="">
-                </div>
+
+
+            @if ($tag->posts()->count() > 0)
+            <h2>
+                Articoli associati:  {{ $tag->posts()->count() }}
+            </h2>
+            <ul>
+                @foreach ($tag->posts as $post)
+                <li>
+                    <a href="{{ route('admin.posts.show', $post->id) }}">
+                        {{ $post->title }}
+                    </a>
+                </li>
+                @endforeach
+
+            </ul>         
+            @else
+                <h3>
+                    Nessun articolo associato
+                </h3>
+
             @endif
-            <p>
-                {{ $post->content }}
-            </p>
-            <a href="{{ route('admin.posts.create') }}" class="btn btn-success">
-                Aggiungi Post
+
+            <a href="{{ route('admin.tags.index') }}" class="btn btn-success">
+                Torna ai tag
             </a>
         </div>
     </div>
